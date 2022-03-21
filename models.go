@@ -1,7 +1,6 @@
 package girya
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -19,5 +18,28 @@ func (w Weight) String() string {
 	if w < 1000 {
 		return strconv.FormatUint(uint64(w), 10) + " " + KilogramsSymbol
 	}
-	return fmt.Sprintf("%.2f %s", float64(w)/1000, TonnesSymbol)
+	result := strconv.FormatFloat(float64(w)/1000, 'f', -1, 64)
+
+	var index int
+	for key, value := range result {
+		if value == '.' {
+			index = key
+		}
+	}
+	// Return as is as dot does not present.
+	if index == 0 {
+		return result + " " + TonnesSymbol
+	}
+
+	// Looking for the place to cut.
+	cutHere := len(result) - index + 1
+	switch cutHere {
+	case 0, 1, 2:
+	case 3:
+		cutHere -= 1
+	default:
+		cutHere = index + 3
+	}
+
+	return result[:cutHere] + " " + TonnesSymbol
 }
