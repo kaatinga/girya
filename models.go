@@ -12,9 +12,14 @@ var (
 )
 
 // Weight is a ready-to use ~uint32 to represent mass in SI base units.
-type Weight uint32
+type Weight int64
 
 func (w Weight) String() string {
+	var sign = ""
+	if w < 0 {
+		w = 0 - w
+		sign = "-"
+	}
 	if w < 1000 {
 		return strconv.FormatUint(uint64(w), 10) + " " + KilogramsSymbol
 	}
@@ -41,5 +46,5 @@ func (w Weight) String() string {
 		cutHere = index + 3
 	}
 
-	return result[:cutHere] + " " + TonnesSymbol
+	return sign + result[:cutHere] + " " + TonnesSymbol
 }
