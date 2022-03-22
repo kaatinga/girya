@@ -11,6 +11,7 @@ func TestWeight_String(t *testing.T) {
 		want   string
 	}{
 		{2020, "2.02 t"},
+		{-2020, "-2.02 t"},
 		{22000, "22 t"},
 		{22030, "22.03 t"},
 		{22333, "22.33 t"},
