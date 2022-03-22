@@ -21,7 +21,7 @@ func (w Weight) String() string {
 		sign = "-"
 	}
 	if w < 1000 {
-		return strconv.FormatUint(uint64(w), 10) + " " + KilogramsSymbol
+		return sign + strconv.FormatUint(uint64(w), 10) + " " + KilogramsSymbol
 	}
 	result := strconv.FormatFloat(float64(w)/1000, 'f', -1, 64)
 
@@ -33,7 +33,7 @@ func (w Weight) String() string {
 	}
 	// Return as is as dot does not present.
 	if index == 0 {
-		return result + " " + TonnesSymbol
+		return sign + result + " " + TonnesSymbol
 	}
 
 	// Looking for the place to cut.
