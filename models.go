@@ -41,7 +41,7 @@ func (w Weight) String() string {
 	switch cutHere {
 	case 0, 1, 2:
 	case 3:
-		cutHere -= 1
+		cutHere = index + 2
 	default:
 		cutHere = index + 3
 	}
