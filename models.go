@@ -5,25 +5,24 @@ import (
 )
 
 // Some symbols below can be changes depending on a language preference.
-
 var (
 	TonnesSymbol    = "t"
 	KilogramsSymbol = "kg"
 )
 
-// Weight is a ready-to use ~uint32 to represent mass in SI base units.
+// Weight is a ready-to use type to represent mass in SI base units.
 type Weight int64
 
-func (w Weight) String() string {
+func (weight Weight) String() string {
 	var sign = ""
-	if w < 0 {
-		w = 0 - w
+	if weight < 0 {
+		weight = 0 - weight
 		sign = "-"
 	}
-	if w < 1000 {
-		return sign + strconv.FormatUint(uint64(w), 10) + " " + KilogramsSymbol
+	if weight < 1000 {
+		return sign + strconv.FormatInt(int64(weight), 10) + " " + KilogramsSymbol
 	}
-	result := strconv.FormatFloat(float64(w)/1000, 'f', -1, 64)
+	result := strconv.FormatFloat(float64(weight)/1000, 'f', -1, 64)
 
 	var index int
 	for key, value := range result {
@@ -31,7 +30,7 @@ func (w Weight) String() string {
 			index = key
 		}
 	}
-	// Return as is as dot does not present.
+	// Return as is as fractional part is not present.
 	if index == 0 {
 		return sign + result + " " + TonnesSymbol
 	}
