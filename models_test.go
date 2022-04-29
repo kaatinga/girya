@@ -11,6 +11,7 @@ func TestWeight_String(t *testing.T) {
 		want   string
 	}{
 		{2020, "2.02 t"},
+		{2004, "2 t"},
 		{-2020, "-2.02 t"},
 		{2000, "2 t"},
 		{2228000, "2228 t"},
@@ -23,6 +24,7 @@ func TestWeight_String(t *testing.T) {
 		{2022, "2.02 t"},
 		{1990, "1.99 t"},
 		{8, "8 kg"},
+		{80190, "80 t"},
 	}
 	for _, tt := range tests {
 		t.Run(strconv.Itoa(int(tt.weight)), func(t *testing.T) {

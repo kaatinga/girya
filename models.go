@@ -22,6 +22,11 @@ func (weight Weight) String() string {
 	if weight < 1000 {
 		return sign + strconv.FormatInt(int64(weight), 10) + " " + KilogramsSymbol
 	}
+	if weight > 50000 {
+		weight = weight / 1000 * 1000
+	} else {
+		weight = weight / 10 * 10
+	}
 	result := strconv.FormatFloat(float64(weight)/1000, 'f', -1, 64)
 
 	var index int
