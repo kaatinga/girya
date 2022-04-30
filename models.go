@@ -6,8 +6,8 @@ import (
 
 // Some symbols below can be changes depending on a language preference.
 var (
-	TonnesSymbol    = "t"
-	KilogramsSymbol = "kg"
+	TonnesPostfix    = " t"
+	KilogramsPostfix = " kg"
 )
 
 // Weight is a ready-to use type to represent mass in SI base units.
@@ -20,14 +20,14 @@ func (weight Weight) String() string {
 		sign = "-"
 	}
 	if weight < 1000 {
-		return sign + strconv.FormatInt(int64(weight), 10) + " " + KilogramsSymbol
+		return sign + strconv.FormatInt(int64(weight), 10) + KilogramsPostfix
 	}
 	if weight > 50000 {
-		weight = weight / 1000 * 1000
-	} else {
-		weight = weight / 10 * 10
+		return sign + strconv.FormatInt(int64(weight/1000), 10) + TonnesPostfix
 	}
-	result := strconv.FormatFloat(float64(weight)/1000, 'f', -1, 64)
+
+	// The number must be truncated to a number with 2 decimal place
+	result := strconv.FormatFloat(float64(weight/10)/100, 'f', -1, 64)
 
 	var index int
 	for key, value := range result {
@@ -37,7 +37,7 @@ func (weight Weight) String() string {
 	}
 	// Return as is as fractional part is not present.
 	if index == 0 {
-		return sign + result + " " + TonnesSymbol
+		return sign + result + TonnesPostfix
 	}
 
 	// Looking for the place to cut.
@@ -50,5 +50,5 @@ func (weight Weight) String() string {
 		cutHere = index + 3
 	}
 
-	return sign + result[:cutHere] + " " + TonnesSymbol
+	return sign + result[:cutHere] + TonnesPostfix
 }
