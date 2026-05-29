@@ -25,6 +25,15 @@ func TestWeight_String(t *testing.T) {
 		{1990, "1.99 t"},
 		{8, "8 kg"},
 		{80190, "80 t"},
+		{0, "0 kg"},
+		{999, "999 kg"},
+		{1000, "1 t"},
+		{1005, "1 t"},
+		{1234, "1.23 t"},
+		{50000, "50 t"},
+		{50001, "50 t"},
+		{-8, "-8 kg"},
+		{-80190, "-80 t"},
 	}
 	for _, tt := range tests {
 		t.Run(strconv.Itoa(int(tt.weight)), func(t *testing.T) {
@@ -32,5 +41,13 @@ func TestWeight_String(t *testing.T) {
 				t.Errorf("String() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkWeight_String(b *testing.B) {
+	weights := []Weight{8, 1234, 22030, 2228000, -2020}
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		_ = weights[i%len(weights)].String()
 	}
 }

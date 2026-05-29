@@ -14,41 +14,33 @@ var (
 type Weight int64
 
 func (weight Weight) String() string {
-	var sign = ""
-	if weight < 0 {
-		weight = 0 - weight
+	value := int64(weight)
+	var sign string
+	if value < 0 {
 		sign = "-"
-	}
-	if weight < 1000 {
-		return sign + strconv.FormatInt(int64(weight), 10) + KilogramsPostfix
-	}
-	if weight > 50000 {
-		return sign + strconv.FormatInt(int64(weight/1000), 10) + TonnesPostfix
+		value = -value
 	}
 
-	// The number must be truncated to a number with 2 decimal place
-	result := strconv.FormatFloat(float64(weight/10)/100, 'f', -1, 64)
+	if value < 1000 {
+		return sign + strconv.FormatInt(value, 10) + KilogramsPostfix
+	}
+	if value > 50000 {
+		return sign + strconv.FormatInt(value/1000, 10) + TonnesPostfix
+	}
 
-	var index int
-	for key, value := range result {
-		if value == '.' {
-			index = key
+	centi := value / 10
+	intPart := centi / 100
+	frac := centi % 100
+
+	buf := make([]byte, 0, len(sign)+8+len(TonnesPostfix))
+	buf = append(buf, sign...)
+	buf = strconv.AppendInt(buf, intPart, 10)
+	if frac != 0 {
+		buf = append(buf, '.', byte('0'+frac/10))
+		if frac%10 != 0 {
+			buf = append(buf, byte('0'+frac%10))
 		}
 	}
-	// Return as is as fractional part is not present.
-	if index == 0 {
-		return sign + result + TonnesPostfix
-	}
-
-	// Looking for the place to cut.
-	cutHere := len(result) - index + 1
-	switch cutHere {
-	case 0, 1, 2:
-	case 3:
-		cutHere = index + 2
-	default:
-		cutHere = index + 3
-	}
-
-	return sign + result[:cutHere] + TonnesPostfix
+	buf = append(buf, TonnesPostfix...)
+	return string(buf)
 }
